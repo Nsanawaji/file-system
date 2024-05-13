@@ -1,12 +1,19 @@
 import {
   Post,
   Controller,
+  Delete,
+  Get,
+  Param,
+  Req,
+  Res,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { editFileName, imageFileFilter } from './utils';
+import * as fs from 'fs';
+
 
 @Controller()
 export class FileController {
@@ -22,7 +29,7 @@ export class FileController {
   )
   async uploadMultipleFiles(@UploadedFiles() files) {
     const response = [];
-    files.forEach((file) => {
+    files.forEach(file => {
       const fileResponse = {
         originalname: file.originalname,
         filename: file.filename,
@@ -32,4 +39,19 @@ export class FileController {
     });
     return response;
   }
+
+  @Get(':imgpath')
+  seeUploadedFile(@Param('imgpath') image, @Res() res) {
+    return res.sendFile(image, { root: './src/files' });
+  }
+
+  @Delete(':imgpath')
+    deleteImg(@Param('imgpath') image, @Req()requestAnimationFrame, @Res() res): Promise<string>{
+        fs.rm('./src/files/' + image, (err) => {
+            if (err){
+                throw err;
+            }
+        });
+        return res.end(`Successfully deleted ${image}`)
+    }
 }
