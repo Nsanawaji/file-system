@@ -17,6 +17,7 @@ import * as fs from 'fs';
 
 @Controller()
 export class FileController {
+  
   @Post('multiple')
   @UseInterceptors(
     FilesInterceptor('image', 3, {
