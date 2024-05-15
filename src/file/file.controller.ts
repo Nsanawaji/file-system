@@ -43,7 +43,7 @@ export class FileController {
 
   @Get(':imgpath')
   seeUploadedFile(@Param('imgpath') image, @Res() res) {
-    return res.sendFile(image, { root: './src/files' });
+    return res.sendFile(image, { root: './src/freddypix' });
   }
 
   @Delete(':imgpath')
